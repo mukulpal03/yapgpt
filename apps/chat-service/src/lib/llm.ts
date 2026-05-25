@@ -10,12 +10,17 @@ export const openai = new OpenAI({
     apiKey
 });
 
-export async function chatWithOpenAI(message: string) {
+let previousResponse: string | null = null;
+
+export async function chatWithOpenAI(message: string): Promise<string> {
     try {
         const response = await openai.responses.create({
             model: process.env.OPENAI_MODEL || "gpt-5-nano",
             input: message,
+            previous_response_id: previousResponse
         })
+
+        previousResponse = response.id;
 
         return response.output_text;
     } catch (error) {

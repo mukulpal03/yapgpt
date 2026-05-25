@@ -1,5 +1,9 @@
 import express, { Express } from 'express'
+import chatRoutes from './modules/chat/chat.routes';
 
-const app: Express = express()
+const app: Express = express();
 
-export default app
+app.use(express.json())
+app.use("/api/chat", chatRoutes)
+
+export default app;

@@ -1,6 +1,7 @@
+import "dotenv/config"
 import app from "./app"
 
-const PORT: number = Number(process.env.PORT) || 3000;
+const PORT: number = Number(process.env.PORT) || 3001;
 
 app.listen(PORT, () => {
     console.log(`Chat service is running on http://localhost:${PORT}`)

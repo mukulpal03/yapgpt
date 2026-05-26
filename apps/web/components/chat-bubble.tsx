@@ -10,7 +10,7 @@ export function ChatBubble({ message }: ChatBubbleProps) {
   if (!isBot) {
     return (
       <div className="flex justify-end animate-in fade-in slide-in-from-bottom-2 duration-200">
-        <div className="max-w-[80%] rounded-2xl rounded-br-md bg-primary px-4 py-2.5 text-sm leading-relaxed text-primary-foreground shadow-sm whitespace-pre-wrap break-words">
+        <div className="max-w-[80%] rounded-2xl rounded-br-md bg-primary px-4 py-2.5 text-sm leading-relaxed text-primary-foreground shadow-sm whitespace-pre-wrap wrap-break-word">
           {message.text}
         </div>
       </div>

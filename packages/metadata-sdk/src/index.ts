@@ -18,7 +18,7 @@ export const generateInferenceLogs = ({ ...rest }) => {
 
 let previousResponse: string | null = null;
 
-export async function callLLMWithMetadata(message: string) {
+export async function generateLLMResponse(message: string) {
   try {
     const start = performance.now();
     const startedAt = new Date();
@@ -61,7 +61,7 @@ export async function callLLMWithMetadata(message: string) {
       incomplete_details: response.incomplete_details,
     });
 
-    return inferenceLogs;
+    return response;
   } catch (error) {
     console.error(error);
     throw new Error("Failed to call LLM with metadata");

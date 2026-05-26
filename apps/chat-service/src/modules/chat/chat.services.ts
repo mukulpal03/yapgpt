@@ -1,4 +1,4 @@
-import { callLLMWithMetadata } from "@repo/metadata-sdk";
+import { generateLLMResponse } from "@repo/metadata-sdk";
 
 export class ChatService {
   async processUserMessage(message: string): Promise<string> {
@@ -7,12 +7,13 @@ export class ChatService {
     }
 
     try {
-      const response = await callLLMWithMetadata(message);
+      const response = await generateLLMResponse(message);
 
-      //   if (!response) {
-      //     throw new Error("No response received from the LLM.");
-      //   }
-      return "response";
+      if (!response) {
+        throw new Error("No response received from the LLM.");
+      }
+
+      return response.output_text || "";
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`LLM Error: ${error.message}`);

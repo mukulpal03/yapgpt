@@ -22,7 +22,7 @@ export function ChatBubble({ message }: ChatBubbleProps) {
       <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border bg-card text-[10px] font-semibold text-muted-foreground">
         AI
       </div>
-      <div className="min-w-0 flex-1 pt-0.5 text-sm leading-relaxed text-foreground whitespace-pre-wrap break-words">
+      <div className="min-w-0 flex-1 pt-0.5 text-sm leading-relaxed text-foreground whitespace-pre-wrap wrap-break-word">
         {message.text}
       </div>
     </div>

@@ -1,4 +1,6 @@
 import OpenAI from "openai";
+import { sendInferenceLogs } from "./ingest.js";
+import type { InferenceLogs } from "./types.js";
 
 const apiKey = process.env.OPENAI_API_KEY;
 
@@ -10,10 +12,13 @@ export const openai = new OpenAI({
   apiKey,
 });
 
-export const generateInferenceLogs = ({ ...rest }) => {
-  return {
-    ...rest,
-  };
+
+export const generateInferenceLogs = (
+    data: InferenceLogs
+): InferenceLogs => {
+    return {
+    ...data,
+};
 };
 
 let previousResponse: string | null = null;
@@ -43,7 +48,7 @@ export async function generateLLMResponse(message: string) {
       totalTokens: response.usage?.total_tokens,
       input: {
         preview: message.slice(0, 500),
-      },
+    },
       output: {
         preview: response.output_text?.slice(0, 500),
       },
@@ -51,9 +56,9 @@ export async function generateLLMResponse(message: string) {
         requestStartedAt: startedAt,
         completedAt,
         providerCreatedAt: response.created_at
-          ? new Date(response.created_at * 1000)
-          : undefined,
-      },
+        ? new Date(response.created_at * 1000)
+        : undefined,
+    },
       status: response.status,
       error: response.error,
       errorMessage: response.error?.message,
@@ -61,9 +66,14 @@ export async function generateLLMResponse(message: string) {
       incomplete_details: response.incomplete_details,
     });
 
+    sendInferenceLogs(inferenceLogs);
+
     return response;
   } catch (error) {
     console.error(error);
     throw new Error("Failed to call LLM with metadata");
   }
 }
+
+export type { InferenceLogs } from "./types.js";
+export { sendInferenceLogs } from "./ingest.js";

@@ -1,9 +1,8 @@
-import { Router } from "express";
+import { Router, type Router as ExpressRouter } from "express";
 import { handleChatMessage } from "./chat.controllers";
 
-const router = Router();
+const router: ExpressRouter = Router();
 
-// Route for sending a chat message to the LLM
 router.post("/", handleChatMessage);
 
 export default router;

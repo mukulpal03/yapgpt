@@ -10,6 +10,20 @@ const timestampsSchema = z.object({
   providerCreatedAt: z.coerce.date().optional(),
 });
 
+const incompleteDetailsSchema = z
+  .object({
+    reason: z.string().optional(),
+  })
+  .catchall(z.string().optional())
+  .optional();
+
+const errorSchema = z
+  .object({
+    message: z.string().optional(),
+    code: z.string().optional(),
+  })
+  .optional();
+
 export const inferenceLogsSchema = z.object({
   model: z.string().min(1),
   provider: z.string().min(1),
@@ -21,10 +35,10 @@ export const inferenceLogsSchema = z.object({
   output: previewSchema,
   timestamps: timestampsSchema,
   status: z.string().min(1),
-  error: z.unknown().optional(),
+  error: errorSchema,
   errorMessage: z.string().optional(),
   errorCode: z.string().optional(),
-  incomplete_details: z.unknown().optional(),
+  incomplete_details: incompleteDetailsSchema,
 });
 
 export type InferenceLogs = z.infer<typeof inferenceLogsSchema>;

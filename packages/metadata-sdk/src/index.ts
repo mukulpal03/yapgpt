@@ -60,10 +60,14 @@ export async function generateLLMResponse(message: string) {
           : undefined,
       },
       status: response.status ?? "unknown",
-      error: response.error,
+      error: response.error
+        ? { message: response.error.message, code: response.error.code }
+        : undefined,
       errorMessage: response.error?.message,
       errorCode: response.error?.code,
-      incomplete_details: response.incomplete_details,
+      incomplete_details: response.incomplete_details
+        ? { reason: String(response.incomplete_details) }
+        : undefined,
     });
 
     sendInferenceLogs(inferenceLogs);

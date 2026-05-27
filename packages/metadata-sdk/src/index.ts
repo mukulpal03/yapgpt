@@ -156,7 +156,6 @@ export async function generateLLMResponse(
       model: defaultModel(),
       input: message,
       previous_response_id: previousResponse,
-      max_output_tokens: 100,
     });
 
     const completedAt = new Date();

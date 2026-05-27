@@ -54,9 +54,9 @@ importers:
 
   apps/ingestion-service:
     dependencies:
-      '@repo/metadata-sdk':
+      '@repo/validation':
         specifier: workspace:*
-        version: link:../../packages/metadata-sdk
+        version: link:../../packages/validation
       cors:
         specifier: ^2.8.6
         version: 2.8.6
@@ -173,6 +173,9 @@ importers:
 
   packages/metadata-sdk:
     dependencies:
+      '@repo/validation':
+        specifier: workspace:*
+        version: link:../validation
       openai:
         specifier: ^6.39.0
         version: 6.39.0(zod@3.25.76)
@@ -237,6 +240,22 @@ importers:
       eslint:
         specifier: ^9.39.1
         version: 9.39.1(jiti@2.7.0)
+      typescript:
+        specifier: 5.9.2
+        version: 5.9.2
+
+  packages/validation:
+    dependencies:
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
+    devDependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/node':
+        specifier: ^22.15.3
+        version: 22.15.3
       typescript:
         specifier: 5.9.2
         version: 5.9.2

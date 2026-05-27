@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { parseInferenceLogs } from "@repo/validation";
 import { IngestService } from "./ingest.services";
 
 const ingestService = new IngestService();
@@ -9,25 +10,18 @@ export async function handleIngestLogs(
     next: NextFunction
 ): Promise<void> {
     try {
-        const inferenceLogs = req.body;
+        const parsed = parseInferenceLogs(req.body);
 
-        if (inferenceLogs === undefined || inferenceLogs === null) {
+        if (!parsed.success) {
             res.status(400).json({
                 success: false,
-                error: "Bad Request: inference logs payload is required in request body."
+                error: "Bad Request: invalid inference logs payload.",
+                details: parsed.error.flatten(),
             });
             return;
         }
 
-        if (typeof inferenceLogs !== "object" || Array.isArray(inferenceLogs)) {
-            res.status(400).json({
-                success: false,
-                error: "Bad Request: inference logs must be a JSON object."
-            });
-            return;
-        }
-
-        await ingestService.processInferenceLogs(inferenceLogs);
+        await ingestService.processInferenceLogs(parsed.data);
 
         res.status(200).json({
             success: true,

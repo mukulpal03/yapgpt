@@ -40,26 +40,26 @@ export async function generateLLMResponse(message: string) {
     previousResponse = response.id;
 
     const inferenceLogs = generateInferenceLogs({
-      model: response.model,
+      model: response.model ?? process.env.OPENAI_MODEL ?? "gpt-5-nano",
       provider: "openai",
       latencyInMs: end - start,
-      inputTokens: response.usage?.input_tokens,
-      outputTokens: response.usage?.output_tokens,
-      totalTokens: response.usage?.total_tokens,
+      inputTokens: response.usage?.input_tokens ?? 0,
+      outputTokens: response.usage?.output_tokens ?? 0,
+      totalTokens: response.usage?.total_tokens ?? 0,
       input: {
         preview: message.slice(0, 500),
-    },
+      },
       output: {
-        preview: response.output_text?.slice(0, 500),
+        preview: response.output_text?.slice(0, 500) ?? "",
       },
       timestamps: {
         requestStartedAt: startedAt,
         completedAt,
         providerCreatedAt: response.created_at
-        ? new Date(response.created_at * 1000)
-        : undefined,
-    },
-      status: response.status,
+          ? new Date(response.created_at * 1000)
+          : undefined,
+      },
+      status: response.status ?? "unknown",
       error: response.error,
       errorMessage: response.error?.message,
       errorCode: response.error?.code,

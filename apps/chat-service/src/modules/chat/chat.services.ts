@@ -1,24 +1,32 @@
 import { generateLLMResponse } from "@repo/metadata-sdk";
 
+export type ChatResult =
+  | { success: true; reply: string }
+  | { success: false; error: string; code?: string };
+
 export class ChatService {
-  async processUserMessage(message: string): Promise<string> {
+  async processUserMessage(message: string): Promise<ChatResult> {
     if (!message || typeof message !== "string" || message.trim() === "") {
-      throw new Error("Message content cannot be blank.");
+      return {
+        success: false,
+        error: "Message content cannot be blank.",
+        code: "validation_error",
+      };
     }
 
-    try {
-      const response = await generateLLMResponse(message);
+    const result = await generateLLMResponse(message);
 
-      if (!response) {
-        throw new Error("No response received from the LLM.");
-      }
-
-      return response.output_text || "";
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`LLM Error: ${error.message}`);
-      }
-      throw new Error("An unexpected error occurred during LLM processing.");
+    if (!result.success) {
+      return {
+        success: false,
+        error: result.error.message,
+        code: result.error.code,
+      };
     }
+
+    return {
+      success: true,
+      reply: result.outputText,
+    };
   }
 }

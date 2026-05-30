@@ -8,6 +8,13 @@
       "when": 1779862832579,
       "tag": "0000_rich_hiroim",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1779868559237,
+      "tag": "0001_smooth_paper_doll",
+      "breakpoints": true
     }
   ]
 }

@@ -4,8 +4,9 @@ import { useRef, useState } from "react";
 import { ArrowUp } from "lucide-react";
 import { Button } from "@repo/ui/components/ui/button";
 import { Textarea } from "@repo/ui/components/ui/textarea";
-import { ChatArea } from "../components/chat-area";
-import { useChat } from "../hooks/useChat";
+import { AuthHeader } from "../../components/auth/auth-header";
+import { ChatArea } from "../../components/chat-area";
+import { useChat } from "../../hooks/useChat";
 
 export default function Home() {
   const { messages, isLoading, error, sendMessage } = useChat();
@@ -44,6 +45,7 @@ export default function Home() {
 
   return (
     <main className="flex h-screen flex-col overflow-hidden bg-background text-foreground">
+      <AuthHeader />
       <ChatArea
         messages={messages}
         isLoading={isLoading}

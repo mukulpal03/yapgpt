@@ -14,4 +14,4 @@ export { conversations } from "./conversation.js";
 export type { Conversation, NewConversation } from "./conversation.js";
 
 export { messages } from "./messages.js";
-export type { Message, NewMessage } from "./messages.js";
+export type { Message, NewMessage, MessageRole } from "./messages.js";

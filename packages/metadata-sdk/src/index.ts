@@ -27,7 +27,7 @@ function buildLogs(
   startedAt: Date,
   completedAt: Date,
   latencyInMs: number,
-  overrides: Partial<InferenceLogs> & Pick<InferenceLogs, "status">
+  overrides: Partial<InferenceLogs> & Pick<InferenceLogs, "status">,
 ): InferenceLogs {
   return generateInferenceLogs({
     model: overrides.model ?? defaultModel(),
@@ -56,7 +56,7 @@ function logsFromResponse(
   response: OpenAI.Responses.Response,
   startedAt: Date,
   completedAt: Date,
-  latencyInMs: number
+  latencyInMs: number,
 ): InferenceLogs {
   return buildLogs(message, startedAt, completedAt, latencyInMs, {
     model: response.model ?? defaultModel(),
@@ -88,7 +88,7 @@ function logsFromFailure(
   startedAt: Date,
   completedAt: Date,
   latencyInMs: number,
-  error: LLMError
+  error: LLMError,
 ): InferenceLogs {
   return buildLogs(message, startedAt, completedAt, latencyInMs, {
     status: "failed",
@@ -122,9 +122,7 @@ function isResponseFailure(response: OpenAI.Responses.Response): boolean {
   );
 }
 
-function failureFromResponse(
-  response: OpenAI.Responses.Response
-): LLMError {
+function failureFromResponse(response: OpenAI.Responses.Response): LLMError {
   if (response.error?.message) {
     return {
       message: response.error.message,
@@ -146,7 +144,7 @@ function failureFromResponse(
 }
 
 export async function generateLLMResponse(
-  message: string
+  message: string,
 ): Promise<GenerateLLMResult> {
   const start = performance.now();
   const startedAt = new Date();
@@ -166,7 +164,7 @@ export async function generateLLMResponse(
       response,
       startedAt,
       completedAt,
-      latencyInMs
+      latencyInMs,
     );
     sendInferenceLogs(inferenceLogs);
 
@@ -181,7 +179,10 @@ export async function generateLLMResponse(
 
     return {
       success: true,
-      outputText: response.output_text ?? "",
+      assistantResponse: {
+        role: "assistant",
+        content: response.output_text ?? "",
+      }
     };
   } catch (error) {
     const completedAt = new Date();
@@ -195,7 +196,7 @@ export async function generateLLMResponse(
       startedAt,
       completedAt,
       latencyInMs,
-      llmError
+      llmError,
     );
     sendInferenceLogs(inferenceLogs);
 

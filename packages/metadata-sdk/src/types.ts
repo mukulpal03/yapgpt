@@ -8,7 +8,10 @@ export type LLMError = {
 export type GenerateLLMResult =
   | {
       success: true;
-      outputText: string;
+      assistantResponse: {
+        role: "assistant";
+        content: string;
+      };
     }
   | {
       success: false;

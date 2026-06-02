@@ -1,11 +1,16 @@
 import { generateLLMResponse } from "@repo/metadata-sdk";
+import { createConversation, createMessage } from "./chat.repository";
+import type { NewConversation } from "@repo/database/schema";
 
 export type ChatResult =
-  | { success: true; reply: string }
+  | { success: true; reply: { role: "assistant"; content: string } }
   | { success: false; error: string; code?: string };
 
 export class ChatService {
-  async processUserMessage(message: string): Promise<ChatResult> {
+  async processUserMessage(
+    userId: NonNullable<NewConversation["userId"]>,
+    message: string,
+  ): Promise<ChatResult> {
     if (!message || typeof message !== "string" || message.trim() === "") {
       return {
         success: false,
@@ -13,6 +18,18 @@ export class ChatService {
         code: "validation_error",
       };
     }
+
+    const conversation = await createConversation(userId);
+
+    if (!conversation) {
+      return {
+        success: false,
+        error: "Failed to create conversation.",
+        code: "database_error",
+      };
+    }
+
+    await createMessage(conversation.id, "user", message);
 
     const result = await generateLLMResponse(message);
 
@@ -24,9 +41,15 @@ export class ChatService {
       };
     }
 
+    await createMessage(
+      conversation.id,
+      "assistant",
+      result.assistantResponse?.content ?? "",
+    );
+
     return {
       success: true,
-      reply: result.outputText,
+      reply: result.assistantResponse,
     };
   }
 }

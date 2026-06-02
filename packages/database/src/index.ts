@@ -18,4 +18,5 @@ export {
   messages,
   type Message,
   type NewMessage,
+  type MessageRole,
 } from "./schema/index.js";

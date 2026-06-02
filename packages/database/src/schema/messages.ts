@@ -30,3 +30,4 @@ export const messages = pgTable(
 
 export type Message = typeof messages.$inferSelect;
 export type NewMessage = typeof messages.$inferInsert;
+export type MessageRole = (typeof messageRoleEnum.enumValues)[number];

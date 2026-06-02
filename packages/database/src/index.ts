@@ -12,4 +12,10 @@ export {
   users,
   type User,
   type NewUser,
+  conversations,
+  type Conversation,
+  type NewConversation,
+  messages,
+  type Message,
+  type NewMessage,
 } from "./schema/index.js";
